@@ -1,0 +1,49 @@
+#
+#
+#
+#
+#
+# +-----------+                   +------------+      192.168.2.1---------------+
+# |           | 192.168.1.1       |            +----------------+               |
+# |  Node1    +-------------------+     node2  | 192.168.2.2    |      node3    |
+# +-----------+        192.168.1.2+------------+                +---------------+
+#
+#
+
+nodes:
+  - name: node1
+    image: crpd:latest
+    link:
+      - name: node2
+        prefix: 192.168.1.1/30
+        #- name: ce2
+        #prefix: 192.168.2.1/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: node2
+    image: crpd:latest
+    link:
+      - name: node1
+        prefix: 192.168.1.2/30
+      - name: node3
+        prefix: 192.168.2.2/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: node3
+    image: crpd:latest
+    link:
+      - name: node2
+        prefix: 192.168.2.1/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log

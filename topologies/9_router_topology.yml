@@ -1,0 +1,161 @@
+#                                                            192.168.1/30 Underlay addressing
+#       
+#       
+#       
+#          11.11.11.11/32                                      5.5.5.5                                                    31.31.31.31/32
+#                                                         +--------------+
+#        +-----------------+                              |              |                                            +-------------------+
+#        |      CE1        |                              |     RR       |                                            |                   |
+#        |                 |                          .25 |              | .33                                        |        CE3        |
+#        +-------+---------+       +----------------------+------+-------+---------------------------+                +-------------------+
+#                | .9              |                             | .29                               |                  .18|
+#                |                 |                             |                                   |                     |
+#                |                 |                             |                                   |                     |
+#                |                 |.26                          | .30                               |.34                  |
+#                | .10  +----------------+              +--------+---------+                +------------------+        .17|
+#                +------+                |              |                  |                |                  +-----------+
+#                       |     PE1        | .1         .2|                  |.5            .6|                  |
+#                       |                +--------------+        P1        +----------------+      PE2         |
+#                 +-----+                |              |                  |                |                  +------------+
+#                 |.13  +----------------+              +-----+------------+                +------------------+         .21|
+#                 |          1.1.1.1 |.41                     | 2.2.2.2                      .45|  3.3.3.3                  |
+#                 |                  |                      .37                                 |                           |
+#                 |                  |                        |                                 |                           |
+#                 |                  |                    .38 |                                 |                        .22|
+#                 |.14               |                   +----+------------+                    |                    +---------------------+
+#       +-------------------+        |               .42 |                 | .46                |                    |                     |
+#       |                   |        +-------------------+        P2       +--------------------+                    |         CE4         |
+#       |       CE2         |                            |                 |                                         +---------------------+
+#       +-------------------+                            +-----------------+
+#                                                             4.4.4.4                                                       32.32.32.32/32
+#          12.12.12.12/32
+#       
+
+nodes:
+  - name: ce1
+    image: crpd:latest
+    link:
+      - name: pe1
+        prefix: 192.168.1.9/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+  - name: ce2
+    image: crpd:latest
+    link:
+      - name: pe1
+        prefix: 192.168.1.14/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+
+  - name: pe1
+    image: crpd:latest
+    link:
+      - name: ce1
+        prefix: 192.168.1.10/30
+      - name: ce2
+        prefix: 192.168.1.13/30
+      - name: p1
+        prefix: 192.168.1.1/30
+      - name: rr
+        prefix: 192.168.1.26/30
+      - name: p2
+        prefix: 192.168.1.41/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+
+  - name: p1
+    image: crpd:latest
+    link:
+      - name: pe1
+        prefix: 192.168.1.2/30
+      - name: pe2
+        prefix: 192.168.1.5/30
+      - name: rr
+        prefix: 192.168.1.30/30
+      - name: p2
+        prefix: 192.168.1.37/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+
+  - name: pe2
+    image: crpd:latest
+    link:
+      - name: ce3
+        prefix: 192.168.1.17/30
+      - name: ce4
+        prefix: 192.168.1.21/30
+      - name: p1
+        prefix: 192.168.1.6/30
+      - name: rr
+        prefix: 192.168.1.34/30
+      - name: p2
+        prefix: 192.168.1.45/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+
+  - name: p2
+    image: crpd:latest
+    link:
+      - name: p1
+        prefix: 192.168.1.38/30
+      - name: pe1
+        prefix: 192.168.1.42/30
+      - name: pe2
+        prefix: 192.168.1.46/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+
+  - name: rr
+    image: crpd:latest
+    link:
+      - name: pe1
+        prefix: 192.168.1.25/30
+      - name: p1
+        prefix: 192.168.1.29/30
+      - name: pe2
+        prefix: 192.168.1.33/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+
+  - name: ce3
+    image: crpd:latest
+    link:
+      - name: pe2
+        prefix: 192.168.1.18/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log
+
+  - name: ce4
+    image: crpd:latest
+    link:
+      - name: pe2
+        prefix: 192.168.1.22/30
+    volume:
+      - name: config
+        path: /config
+      - name: varlog
+        path: /var/log

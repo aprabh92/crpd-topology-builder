@@ -1,0 +1,23 @@
+set version "20200725.222326_tmfink.r3145 [tmfink]"
+set system root-authentication encrypted-password "$6$1Zury$0xpmknfeG8lmK6ABI4.Y4wyMskk5sIRJHx/KiqDR98V6yKuSe4ygxxUIaTbmzYKvTmzwfJj1DrKTpRf5u4ihZ1"
+set system services ssh root-login allow
+set system services netconf ssh
+set routing-options router-id 5.5.5.5
+set protocols bgp group RR-GROUP1 type internal
+set protocols bgp group RR-GROUP1 family inet-vpn unicast
+set protocols bgp group RR-GROUP1 cluster 5.5.5.5
+set protocols bgp group RR-GROUP1 local-as 1
+set protocols bgp group RR-GROUP1 neighbor 1.1.1.1 family inet unicast
+set protocols bgp group RR-GROUP1 neighbor 1.1.1.1 family inet-vpn unicast
+set protocols bgp group RR-GROUP1 neighbor 2.2.2.2 family inet unicast
+deactivate protocols bgp group RR-GROUP1 neighbor 2.2.2.2
+set protocols bgp group RR-GROUP1 neighbor 3.3.3.3 family inet unicast
+set protocols bgp group RR-GROUP1 neighbor 3.3.3.3 family inet-vpn unicast
+set protocols ldp interface lo.0
+set protocols ldp interface rr_p1
+set protocols ldp interface rr_pe1
+set protocols ldp interface rr_pe2
+set protocols ospf area 0.0.0.0 interface rr_p1
+set protocols ospf area 0.0.0.0 interface rr_pe2
+set protocols ospf area 0.0.0.0 interface rr_pe1
+set protocols ospf area 0.0.0.0 interface lo.0 passive

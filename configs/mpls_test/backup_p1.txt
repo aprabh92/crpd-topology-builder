@@ -1,0 +1,5 @@
+set version "20210312.155139__devpublish.r1177443 [_devpublish]"
+set protocols ldp interface all
+set protocols mpls interface all
+set protocols ospf area 0.0.0.0 interface all
+set protocols ospf area 0.0.0.0 interface lo.0 passive

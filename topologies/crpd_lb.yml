@@ -1,0 +1,95 @@
+#                                            +------------------+
+#                                            |                  |
+#                                            |    (crpd0)       |
+#                                            |     server       |
+#                                            |                  |
+#                                            +------------------+
+#                                                     |192.168.2.1/30
+#                                                     |
+#                                                     |
+#                                                     |
+#                                                     |192.168.2.2/30
+#                                             +---------------+
+#                                             |               |
+#                                             |               |
+#                                192.168.1.1  |    cRPD       +------------------+
+#                          +------------------+     (LB)      | 192.168.1.9      |
+#                          |                  |               |                  |
+#                          |                  +-------+-------+                  |
+#                          |             192.168.1.5  |                          |                 All are /30 subnets
+#                          |                          |                          |
+#                          |                          |                          |
+#                          |                          |                          |
+#                          |                          |                          |
+#                          |                          |                          |
+#                          |                          |                          |
+#                          |                          |                          |
+#       192.168.1.2/30     |             192.168.1.6  |                          | 192.168.1.10
+#                  +-------+-------+           +------+-------+        +---------+----+
+#                  |   BIND9       |           |   BIND9      |        |    BIND9     |
+#                  |   DNS1        |           |    DNS2      |        |    DNS3      |
+#                  |  (cRPD 2)     |           |  (cRPD 3)    |        | (cRPD 4)     |
+#                  |               |           |              |        |              |
+#                  +---------------+           +--------------+        +--------------+
+#      
+nodes:
+  - name: server
+    image: crpd:latest
+    link:
+      - name: crpd
+        prefix: 192.168.2.1/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: crpd
+    image: crpd:latest
+    link:
+      - name: server
+        prefix: 192.168.2.2/30
+      - name: dns1
+        prefix: 192.168.1.1/30
+      - name: dns2
+        prefix: 192.168.1.5/30
+      - name: dns3
+        prefix: 192.168.1.9/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: dns1
+    image: crpd:latest
+    link:
+      - name: crpd
+        prefix: 192.168.1.2/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: dns2
+    image: crpd:latest
+    link:
+      - name: crpd
+        prefix: 192.168.1.6/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: dns3
+    image: crpd:latest
+    link:
+      - name: crpd
+        prefix: 192.168.1.10/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log

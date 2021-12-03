@@ -1,0 +1,27 @@
+set version "20210312.155139__devpublish.r1177443 [_devpublish]"
+set policy-options policy-statement VPN-EXPORT term 10 then community add EXPORT-VPN-1
+set policy-options policy-statement VPN-EXPORT term 10 then accept
+set policy-options policy-statement VPN-IMPORT from community EXPORT-VPN-1
+set policy-options policy-statement VPN-IMPORT then accept
+set policy-options community EXPORT-VPN-1 members target:65001:100
+set routing-instances VPN-A instance-type vrf
+set routing-instances VPN-A interface pe2_ce1
+set routing-instances VPN-A route-distinguisher 65001:101
+set routing-instances VPN-A vrf-import VPN-IMPORT
+set routing-instances VPN-A vrf-export VPN-EXPORT
+set routing-instances VPN-A vrf-table-label
+set routing-instances VPN-B instance-type vrf
+set routing-instances VPN-B interface pe2_ce2
+set routing-instances VPN-B route-distinguisher 65001:201
+set routing-instances VPN-B vrf-target target:65001:200
+set routing-instances VPN-B vrf-table-label
+set protocols bgp group VPN type internal
+set protocols bgp group VPN local-address 3.3.3.3
+set protocols bgp group VPN family inet unicast
+set protocols bgp group VPN family inet-vpn unicast
+set protocols bgp group VPN local-as 65001
+set protocols bgp group VPN neighbor 1.1.1.1
+set protocols ldp interface all
+set protocols mpls interface all
+set protocols ospf area 0.0.0.0 interface all
+set protocols ospf area 0.0.0.0 interface lo.0 passive

@@ -1,0 +1,5 @@
+set version "20200725.222326_tmfink.r3145 [tmfink]"
+set system root-authentication encrypted-password "$6$1Zury$0xpmknfeG8lmK6ABI4.Y4wyMskk5sIRJHx/KiqDR98V6yKuSe4ygxxUIaTbmzYKvTmzwfJj1DrKTpRf5u4ihZ1"
+set system services ssh root-login allow
+set system services netconf ssh
+set routing-options static route 12.12.12.12/32 next-hop 192.168.1.21

@@ -1,0 +1,189 @@
+# Below template defines the described topology to be used in topology creator script
+#
+#                                                              +------------------------+                        +-------------------------+
+#                                                              |                        |                        |                         |
+#                                                              |      TOF1              |                        |        TOF2             |
+#                                                              |                        |                        |                         |
+#                                                              |                        |                        |                         |
+#                                                              +--+--------+-----+------+                        +-+---------+-------+-----+
+#                                                                 |        |     |                                 |         |       |
+#                                                                 |        |     +--------------------------------------------------------++
+#                                                                 |  +-------------------------------------------------------+       |    |
+#                                                                 |  |     |                                       |                 |    |
+#                                                                 |  |     +--------------------+                  |                 |    |
+#                                                                 |  |                          |                  |                 |    |
+#                                            +--------------------+--++                   +-----+------------------++             +--+----+------------------+
+#                                            |                        |                   |                         |             |                          |
+#                                            |          Spine1        |                   |      Spine 2            |             |         Spine 3          |
+#                                            |                        |                   |                         |             |                          |
+#              +-----------------------------+------+------+--+-------+            +------+------+------------------+             +--------------------------+    
+#              |                                    |      |  |                    |             |          |-----------------------------------------------------+
+#              |                                    |      |  +---------------------------------------------------------------------------------------+ |   |     |
+#              |                 +--------------------------------------------------------------------------------------------------------|     |     | |   |     |
+#              |                 |       +------------------------------------------------------------------------------------------------------+     | |   |     |
+#              |                 |       |          +---------------------------------------------------------+    |     +------------------------------+   |     |
+#              |                 |       |                 |                |      |                          |    |     |                            |     |     |
+#       +------+-----------------+-------+-+          +----+----------------+------+--+             +---------+----+-----+-----------+         +------+-----+-----+---------+
+#       |                                  |          |                               |             |                                |         |                            |
+#       |                                  |          |                               |             |                                |         |       Leaf 4               |
+#       |            Leaf 1                |          |          leaf 2               |             |       Leaf 3                   |         |                            |
+#       |                                  |          |                               |             |                                |         |                            |
+#       |                                  |          |                               |             |                                |         |                            |
+#       +----------------------------------+          +-------------------------------+             +--------------------------------+         |                            |
+#                                                                                                                                              +----------------------------+
+#
+
+       
+nodes:
+  - name: tof1
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.50.1/30
+      - name: spine2
+        prefix: 192.168.50.5/30
+      - name: spine3
+        prefix: 192.168.50.9/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: tof2
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.51.1/30
+      - name: spine2
+        prefix: 192.168.51.5/30
+      - name: spine3
+        prefix: 192.168.51.9/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: spine1
+    image: crpd-rift:latest
+    link:
+      - name: tof1
+        prefix: 192.168.50.2/30
+      - name: tof2
+        prefix: 192.168.51.2/30
+      - name: leaf1
+        prefix: 192.168.60.1/30
+      - name: leaf2
+        prefix: 192.168.60.5/30
+      - name: leaf3
+        prefix: 192.168.60.9/30
+      - name: leaf4
+        prefix: 192.168.60.13/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: spine2
+    image: crpd-rift:latest
+    link:
+      - name: tof1
+        prefix: 192.168.50.6/30
+      - name: tof2
+        prefix: 192.168.51.6/30
+      - name: leaf1
+        prefix: 192.168.61.1/30
+      - name: leaf2
+        prefix: 192.168.61.5/30
+      - name: leaf3
+        prefix: 192.168.61.9/30
+      - name: leaf4
+        prefix: 192.168.61.13/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: spine3
+    image: crpd-rift:latest
+    link:
+      - name: tof1
+        prefix: 192.168.50.10/30
+      - name: tof2
+        prefix: 192.168.51.10/30
+      - name: leaf1
+        prefix: 192.168.62.1/30
+      - name: leaf2
+        prefix: 192.168.62.5/30
+      - name: leaf3
+        prefix: 192.168.62.9/30
+      - name: leaf4
+        prefix: 192.168.62.13/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: leaf1
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.60.2/30
+      - name: spine2
+        prefix: 192.168.61.2/30
+      - name: spine3
+        prefix: 192.168.62.2/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: leaf2
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.60.6/30
+      - name: spine2
+        prefix: 192.168.61.6/30
+      - name: spine3
+        prefix: 192.168.62.6/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: leaf3
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.60.10/30
+      - name: spine2
+        prefix: 192.168.61.10/30
+      - name: spine3
+        prefix: 192.168.62.10/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log
+
+  - name: leaf4
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.60.14/30
+      - name: spine2
+        prefix: 192.168.61.14/30
+      - name: spine3
+        prefix: 192.168.62.14/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlogq
+          path: /var/log

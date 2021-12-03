@@ -1,0 +1,34 @@
+set version "20200725.222326_tmfink.r3145 [tmfink]"
+set system root-authentication encrypted-password "$6$1Zury$0xpmknfeG8lmK6ABI4.Y4wyMskk5sIRJHx/KiqDR98V6yKuSe4ygxxUIaTbmzYKvTmzwfJj1DrKTpRf5u4ihZ1"
+set system services ssh root-login allow
+set system services netconf ssh
+set routing-instances VPN-A routing-options static route 11.11.11.11/32 next-hop 192.168.1.9
+set routing-instances VPN-A instance-type vrf
+set routing-instances VPN-A interface pe1_ce1
+set routing-instances VPN-A route-distinguisher 100:100
+set routing-instances VPN-A vrf-target target:100:100
+set routing-instances VPN-A vrf-table-label
+set routing-instances VPN-B routing-options static route 12.12.12.12/32 next-hop 192.168.1.14
+set routing-instances VPN-B instance-type vrf
+set routing-instances VPN-B interface pe1_ce2
+set routing-instances VPN-B route-distinguisher 100:200
+set routing-instances VPN-B vrf-target target:100:200
+set routing-instances VPN-B vrf-table-label
+set routing-options router-id 1.1.1.1
+set protocols bgp group RR type internal
+set protocols bgp group RR local-as 1
+set protocols bgp group RR neighbor 5.5.5.5 local-address 1.1.1.1
+set protocols bgp group RR neighbor 5.5.5.5 family inet unicast
+set protocols bgp group RR neighbor 5.5.5.5 family inet-vpn unicast
+set protocols ldp interface lo.0
+set protocols ldp interface pe1_p1
+set protocols ldp interface pe1_p2
+set protocols ldp interface pe1_rr
+set protocols mpls interface all
+set protocols mpls interface pe1_p1
+set protocols mpls interface pe1_p2
+set protocols mpls interface lo.0
+set protocols ospf area 0.0.0.0 interface lo.0 passive
+set protocols ospf area 0.0.0.0 interface pe1_p2
+set protocols ospf area 0.0.0.0 interface pe1_rr
+set protocols ospf area 0.0.0.0 interface pe1_p1

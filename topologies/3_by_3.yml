@@ -1,0 +1,129 @@
+# Topology creator template
+#
+#   nodes:
+#     - name: leaf1
+#       image: crpd-rift:latest
+#       link:
+#         - name: spine1
+#           prefix: 192.168.50.1/30
+#         - name: spine2
+#           prefix: 192.168.50.5/30
+#       volume:
+#         - name: config
+#           path: /config
+#         - name: varlog
+#           path: /var/log
+#
+#
+#
+#   +---------------+                        +-----------------+
+#   |               |                        |                 |
+#   |    TOF1       |                        |      TOF2       |
+#   |               |                        |                 |
+#   +------+---+----+                        ++-------+--------+
+#          |   |                              |       |
+#          |   +---------------------------------+    |
+#          |      |---------------------------|  |    |
+#   +------+--------+                        +---+----+--------+
+#   |               |                        |                 |
+#   |      spine1   |                        |     spine2      |
+#   |               |                        |                 |
+#   +------+---+----+                        +--+------+-------+
+#          |   |                                |      |
+#          |   +-----------------------------------+   |
+#          |        +---------------------------+  |   |
+#          |        |                              |   |
+#   +------+--------+                        +-----+---+-------+
+#   |               |                        |                 |
+#   |    leaf1      |                        |       leaf2     |
+#   |               |                        |                 |
+#   +---------------+                        +-----------------+
+#
+#
+
+nodes:
+  - name: leaf1
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.50.1/30
+      - name: spine2
+        prefix: 192.168.50.5/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlog
+          path: /var/log
+
+  - name: leaf2
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.60.1/30
+      - name: spine2
+        prefix: 192.168.60.5/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlog
+          path: /var/log
+
+  - name: spine1
+    image: crpd-rift:latest
+    link:
+      - name: leaf1
+        prefix: 192.168.50.2/30
+      - name: leaf2
+        prefix: 192.168.60.2/30
+      - name: tof1
+        prefix: 192.168.70.1/30
+      - name: tof2
+        prefix: 192.168.80.1/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlog
+          path: /var/log
+
+  - name: spine2
+    image: crpd-rift:latest
+    link:
+      - name: leaf1
+        prefix: 192.168.50.6/30
+      - name: leaf2
+        prefix: 192.168.60.6/30
+      - name: tof1
+        prefix: 192.168.70.5/30
+      - name: tof2
+        prefix: 192.168.80.5/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlog
+          path: /var/log
+
+  - name: tof1
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.70.2/30
+      - name: spine2
+        prefix: 192.168.70.6/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlog
+          path: /var/log
+
+  - name: tof2
+    image: crpd-rift:latest
+    link:
+      - name: spine1
+        prefix: 192.168.80.2/30
+      - name: spine2
+        prefix: 192.168.80.6/30
+    volume:
+        - name: config
+          path: /config
+        - name: varlog
+          path: /var/log

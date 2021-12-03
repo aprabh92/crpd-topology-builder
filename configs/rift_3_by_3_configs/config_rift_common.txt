@@ -1,0 +1,11 @@
+set system scripts language python3
+set system root-authentication encrypted-password $6$/ADg8$bBCD5cOVSV6BFZJMIYGBmNknxZeh5uZwold81fly2IfDsxawpJ.BJ2sM3x3NirvrjUlZfzQ30bDUU.EwkGfFb.
+set groups rift-defaults protocols rift node-id auto
+set groups rift-defaults protocols rift level auto
+set groups rift-defaults protocols rift lie-receive-address family inet 224.0.0.120
+set groups rift-defaults protocols rift lie-receive-address family inet6 ff02::a1f7
+set groups rift-defaults protocols rift interface <*> lie-transmit-address family inet 224.0.0.120
+set groups rift-defaults protocols rift interface <*> lie-transmit-address family inet6 ff02::a1f7
+set groups rift-defaults protocols rift interface <*> bfd-liveness-detection minimum-interval 1000
+set routing-options programmable-rpd rib-service dynamic-next-hop-interface enable
+set protocols rift apply-groups rift-defaults
